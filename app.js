@@ -14,7 +14,7 @@
 //     console.log(`rejected: ${milliseconds}`);
 //   });
 //   //.then resolve, reject
-//******************************
+////******************************
 
 // let express = require('express');
 // let app = express();
@@ -25,7 +25,7 @@
 
 // app.listen(8000);
 // //nodemon app.js then go to localhost:8000/api/genres
-//******************************
+////******************************
 let express = require('express');
 let knex = require('knex');
 
@@ -82,10 +82,64 @@ app.get('/api/genres/:id', function(request, response) {
   //this connection bts returns results from the db
 });
 
+
+//this is another endpoint, for lab 3
+//lab 3: Building API Endpoints with Express / Express and Knex
+app.get('/api/artists', function(request, response) {
+  console.log(request.query.filter);
+  let filter = request.query.filter;
+
+  let connection = knex({
+    client: 'sqlite3',
+    connection: {
+      filename: 'chinook.db'
+    }
+  });
+
+  if (filter) {
+    console.log("here");
+    connection.select()
+    .from('artists')
+    .where('Name', 'like', `%${filter}%`)
+    .then((artist) => {
+      if(artist) {
+        response.json(artist);
+      }
+
+      else {
+        response.status(404).json({
+          error: 'Artist with name containing ${filter} not found'
+        });
+      };
+
+    });
+  }
+
+  else {
+    connection.select().from('artists').then((artists) =>{
+      var formatted = artists.map(artist => {
+        var rObj = {};
+        rObj["id"] = artist.ArtistId;
+        rObj["name"] = artist.Name;
+        return rObj;
+      });
+      response.json(formatted);
+    });
+  }
+
+});
+
+
+
 app.listen(process.env.PORT || 8000); //left is for the app to work heroku, right is local
 //nodemon app.js then go to localhost:8000/api/genres
 
 
+
+
+
+////***********************************
+// //David Tang's class demo code
 // let express = require('express');
 // let knex = require('knex');
 
