@@ -82,7 +82,7 @@ app.get('/api/genres/:id', function(request, response) {
   //this connection bts returns results from the db
 });
 
-app.listen(8000);
+app.listen(process.env.PORT || 8000); //left is for the app to work heroku, right is local
 //nodemon app.js then go to localhost:8000/api/genres
 
 
