@@ -296,7 +296,7 @@ app.delete('/api/playlists/:id', function(request, response) {
         
       }
     }).then( () => {
-      response.status(204).send();
+      response.status(200).send();
     }, () => {
       response.status(404).send();
     });
